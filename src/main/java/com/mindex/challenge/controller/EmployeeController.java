@@ -23,14 +23,21 @@ public class EmployeeController {
 
     @GetMapping("/employee/{id}")
     public Employee read(@PathVariable String id) {
-        LOG.debug("Received employee create request for id [{}]", id);
+        LOG.debug("Received employee read request for id [{}]", id);
 
         return employeeService.read(id);
     }
 
+    // @GetMapping("/reporting-structure/{id}")
+    // public int reportingStructure(@PathVariable String id) {
+    //     LOG.debug("Received employee create request for id [{}]", id);
+
+    //     return employeeService.read(id).getNumberOfReports();
+    // }
+
     @PutMapping("/employee/{id}")
     public Employee update(@PathVariable String id, @RequestBody Employee employee) {
-        LOG.debug("Received employee create request for id [{}] and employee [{}]", id, employee);
+        LOG.debug("Received employee update request for id [{}] and employee [{}]", id, employee);
 
         employee.setEmployeeId(id);
         return employeeService.update(employee);
