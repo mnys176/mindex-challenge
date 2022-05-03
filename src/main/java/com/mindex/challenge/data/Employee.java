@@ -57,18 +57,4 @@ public class Employee {
     public void setDirectReports(List<Employee> directReports) {
         this.directReports = directReports;
     }
-
-    public int getNumberOfReports() {
-        return calculateNumberOfReports(this, 0);
-    }
-
-    private int calculateNumberOfReports(Employee node, int currentTotal) {
-        if (node.directReports.size() == 0) return 0;
-        currentTotal += node.getDirectReports().size();
-
-        for (Employee e : node.directReports) {
-            currentTotal += calculateNumberOfReports(e, currentTotal);
-        }
-        return currentTotal;
-    }
 }

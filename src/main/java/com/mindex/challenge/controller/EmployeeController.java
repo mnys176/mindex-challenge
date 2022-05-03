@@ -28,12 +28,12 @@ public class EmployeeController {
         return employeeService.read(id);
     }
 
-    // @GetMapping("/reporting-structure/{id}")
-    // public int reportingStructure(@PathVariable String id) {
-    //     LOG.debug("Received employee create request for id [{}]", id);
+     @GetMapping("/reporting-structure/{id}")
+     public int reportingStructure(@PathVariable String id) {
+         LOG.debug("Received employee create request for id [{}]", id);
 
-    //     return employeeService.read(id).getNumberOfReports();
-    // }
+         return employeeService.calculateReports(id);
+     }
 
     @PutMapping("/employee/{id}")
     public Employee update(@PathVariable String id, @RequestBody Employee employee) {
