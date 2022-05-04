@@ -21,25 +21,27 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
 
     public ReportingStructure build(String id) {
         LOG.debug("Calculating reports for root employee [{}]", id);
-
         Employee employee = employeeRepository.findByEmployeeId(id);
+
+        // use a HashSet to guarantee uniqueness and quick access
         Set<String> reports = new HashSet<>();
-        calculateNumberOfReports(employee, reports);
+        countNodesFromRoot(employee, reports);
 
-        // do not count root node
-        reports.remove(id);
-
-        return new ReportingStructure(employee, reports.size());
+        // do not count the root node
+        int result = reports.size() - 1;
+        return new ReportingStructure(employee, result);
     }
 
-    private void calculateNumberOfReports(Employee node, Set<String> visited) {
-        visited.add(node.getEmployeeId());
-        if (node.getDirectReports() == null) return;
+    private void countNodesFromRoot(Employee root, Set<String> visited) {
+        visited.add(root.getEmployeeId());
 
-        for (Employee e : node.getDirectReports()) {
+        // recursively count nodes in the tree starting from the root
+        if (root.getDirectReports() == null) return;
+        for (Employee e : root.getDirectReports()) {
+
             // fill in the rest of the employee
             e = employeeRepository.findByEmployeeId(e.getEmployeeId());
-            calculateNumberOfReports(e, visited);
+            countNodesFromRoot(e, visited);
         }
     }
 }

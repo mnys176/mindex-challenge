@@ -52,6 +52,8 @@ public class ReportingStructureServiceImplTest {
         assertEquals(readReportingStructure.getNumberOfReports(), 0);
     }
 
+    // TODO: Create tree generator to help with testing more combinations
+
     @Test
     public void testGetReportingStructureNumberOfReports4() {
         ReportingStructure readReportingStructure = restTemplate.getForEntity(reportingStructureUrl, ReportingStructure.class, "16a596ae-edd3-4847-99fe-c4518e82c86f").getBody();

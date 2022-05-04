@@ -54,8 +54,9 @@ public class CompensationServiceTest {
         Employee createdEmployee = restTemplate.postForEntity(employeeUrl, employee, Employee.class).getBody();
         Compensation testCompensation = new Compensation(createdEmployee, 100.2, new Date(new Timestamp(System.currentTimeMillis()).getTime()));
         Compensation createdCompensation = restTemplate.postForEntity(compensationUrl, testCompensation, Compensation.class).getBody();
-        Compensation[] readCompensation = restTemplate.getForEntity(compensationUrlId, Compensation[].class, createdCompensation.getEmployee().getEmployeeId()).getBody();
 
+        // my implementation returns a list of all compensations associated with an employee ID
+        Compensation[] readCompensation = restTemplate.getForEntity(compensationUrlId, Compensation[].class, createdCompensation.getEmployee().getEmployeeId()).getBody();
         for (Compensation c : readCompensation) {
             assertEquals(createdEmployee.getEmployeeId(), c.getEmployee().getEmployeeId());
         }
