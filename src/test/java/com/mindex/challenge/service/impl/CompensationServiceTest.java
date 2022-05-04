@@ -9,17 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -47,11 +42,23 @@ public class CompensationServiceTest {
     }
 
     @Test
-    public void testCreateCompensationEmployeeCorrect() {
+    public void testCreateCompensation() {
         Employee createdEmployee = restTemplate.postForEntity(employeeUrl, employee, Employee.class).getBody();
         Compensation testCompensation = new Compensation(createdEmployee, 100.2, new Date(new Timestamp(System.currentTimeMillis()).getTime()));
         Compensation createdCompensation = restTemplate.postForEntity(compensationUrl, testCompensation, Compensation.class).getBody();
         assertEquals(createdEmployee.getEmployeeId(), createdCompensation.getEmployee().getEmployeeId());
+    }
+
+    @Test
+    public void testReadCompensation() {
+        Employee createdEmployee = restTemplate.postForEntity(employeeUrl, employee, Employee.class).getBody();
+        Compensation testCompensation = new Compensation(createdEmployee, 100.2, new Date(new Timestamp(System.currentTimeMillis()).getTime()));
+        Compensation createdCompensation = restTemplate.postForEntity(compensationUrl, testCompensation, Compensation.class).getBody();
+        Compensation[] readCompensation = restTemplate.getForEntity(compensationUrlId, Compensation[].class, createdCompensation.getEmployee().getEmployeeId()).getBody();
+
+        for (Compensation c : readCompensation) {
+            assertEquals(createdEmployee.getEmployeeId(), c.getEmployee().getEmployeeId());
+        }
     }
 
     private Employee buildEmployee() {
