@@ -8,7 +8,8 @@ public class ReportingStructure {
         this.employee = employee;
         this.numberOfReports = numberOfReports;
     }
-    public Employee getEmployee() { return employee; }
+
+    public Employee getEmployee() {return employee;}
 
     public int getNumberOfReports() {
         return numberOfReports;
