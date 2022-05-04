@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -48,30 +46,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         LOG.debug("Updating employee [{}]", employee);
 
         return employeeRepository.save(employee);
-    }
-
-    @Override
-    public int calculateReports(String id) {
-        LOG.debug("Calculating reports for root employee [{}]", id);
-
-        Employee employee = employeeRepository.findByEmployeeId(id);
-        Set<String> reports = new HashSet<>();
-        calculateNumberOfReports(employee, reports);
-
-        // do not count root node
-        reports.remove(id);
-
-        return reports.size();
-    }
-
-    private void calculateNumberOfReports(Employee node, Set<String> visited) {
-        visited.add(node.getEmployeeId());
-        if (node.getDirectReports() == null) return;
-
-        for (Employee e : node.getDirectReports()) {
-            // fill in the rest of the employee
-            e = employeeRepository.findByEmployeeId(e.getEmployeeId());
-            calculateNumberOfReports(e, visited);
-        }
     }
 }
